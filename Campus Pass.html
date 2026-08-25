@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏫 校园通 · 文件分享</title>
+    <style>
+        /* ===== 精简样式（毛玻璃） ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, sans-serif;
+            background: linear-gradient(145deg, #d4dcec 0%, #e9eef4 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            height: 95vh;
+            max-height: 820px;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            box-shadow: 0 30px 80px rgba(0, 20, 40, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        /* ----- 登录页 ----- */
+        #loginPage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 40px 32px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        #loginPage .logo {
+            font-size: 64px;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+        #loginPage h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a2a3a;
+            margin-bottom: 4px;
+        }
+        #loginPage .subtitle {
+            font-size: 15px;
+            color: #4a5a6a;
+            margin-bottom: 36px;
+        }
+        #loginPage .login-card {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 28px 24px 32px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        #loginPage label {
+            display: block;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a2a3a;
+            margin-bottom: 8px;
+        }
+        #loginPage input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            outline: none;
+            color: #1a2a3a;
+            transition: border 0.2s;
+        }
+        #loginPage input:focus {
+            border-color: #4a8ad6;
+            box-shadow: 0 0 0 4px rgba(74, 138, 214, 0.15);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        #loginPage .btn-primary {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #4a8ad6, #3a7ac6);
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s;
+            margin-top: 18px;
+            box-shadow: 0 8px 24px rgba(74, 138, 214, 0.25);
+        }
+        #loginPage .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(74, 138, 214, 0.35);
+        }
+        #loginPage .hint {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #5a6a7a;
+        }
+
+        /* ----- 聊天界面 ----- */
+        #chatPage {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        .chat-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 20px 20px;
+        }
+        .chat-header .title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a2a3a;
+        }
+        .chat-header .title span {
+            color: #4a8ad6;
+        }
+        .chat-header .user-badge {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            padding: 6px 14px 6px 10px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #2a5a8a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-header .user-badge .avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4a8ad6, #6a9ae6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .chat-header .settings-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #4a5a6a;
+            padding: 4px 6px;
+            border-radius: 10px;
+        }
+        .chat-header .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 消息列表 */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 18px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            scroll-behavior: smooth;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .messages-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .messages-container::-webkit-scrollbar-thumb {
+            background: rgba(74, 138, 214, 0.3);
+            border-radius: 10px;
+        }
+        .message-date-divider {
+            text-align: center;
+            font-size: 12px;
+            color: #5a6a7a;
+            margin: 12px 0 10px;
+            position: relative;
+            opacity: 0.7;
+        }
+        .message-date-divider span {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            padding: 4px 16px;
+            border-radius: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .message-date-divider::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .message-item {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+            animation: fadeInUp 0.3s ease-out;
+            position: relative;
+        }
+        .message-item.self {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+        .message-item.other {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+        .message-item .msg-nickname {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a6a8a;
+            margin-bottom: 2px;
+            padding-left: 4px;
+            opacity: 0.8;
+        }
+        .message-item.self .msg-nickname {
+            padding-right: 4px;
+            color: #4a8ad6;
+        }
+        .message-item .bubble-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+        }
+        .message-item .bubble {
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.5;
+            word-break: break-word;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+        }
+        .message-item.self .bubble {
+            background: linear-gradient(135deg, rgba(74, 138, 214, 0.8), rgba(90, 154, 230, 0.8));
+            color: #fff;
+            border-bottom-right-radius: 4px;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .message-item.other .bubble {
+            background: rgba(255, 255, 255, 0.6);
+            color: #1a2a3a;
+            border-bottom-left-radius: 4px;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        .message-item .bubble a {
+            color: #4a8ad6;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        .message-item .msg-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-left: 4px;
+            width: 20px;
+            height: 20px;
+        }
+        .msg-status .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .msg-status .status-sent {
+            color: #34a853;
+            font-weight: bold;
+        }
+        .msg-status .status-error {
+            color: #ea4335;
+            font-weight: bold;
+        }
+        .message-item .msg-time {
+            font-size: 10px;
+            color: #5a6a7a;
+            margin-top: 4px;
+            padding: 0 6px;
+            opacity: 0.7;
+        }
+        .message-item.self .msg-time {
+            color: #7a9abe;
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #5a6a7a;
+            text-align: center;
+            padding: 20px;
+            opacity: 0.6;
+        }
+        .empty-state .empty-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+        }
+        .empty-state .empty-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #3a4a5a;
+        }
+
+        /* 底部输入 */
+        .chat-footer {
+            padding: 12px 16px 14px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+            border-radius: 0 0 40px 40px;
+        }
+        .chat-footer .input-wrap {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 4px 6px 4px 18px;
+            display: flex;
+            align-items: flex-end;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: border 0.2s;
+        }
+        .chat-footer .input-wrap:focus-within {
+            border-color: #4a8ad6;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 4px rgba(74, 138, 214, 0.08);
+        }
+        .chat-footer .input-wrap textarea {
+            flex: 1;
+            border: none;
+            background: transparent;
+            resize: none;
+            padding: 10px 0;
+            font-size: 15px;
+            outline: none;
+            font-family: inherit;
+            color: #1a2a3a;
+            min-height: 24px;
+            max-height: 100px;
+            line-height: 1.4;
+        }
+        .chat-footer .input-wrap textarea::placeholder {
+            color: #7a8a9e;
+        }
+        .chat-footer .input-wrap .action-btn {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 6px 6px 6px 4px;
+            color: #5a6a7a;
+            transition: all 0.2s;
+        }
+        .chat-footer .input-wrap .action-btn:hover {
+            color: #4a8ad6;
+            transform: scale(1.1);
+        }
+        .emoji-picker {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            padding: 12px 14px;
+            width: 280px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            justify-items: center;
+        }
+        .emoji-picker.active {
+            display: grid;
+        }
+        .emoji-picker .emoji-item {
+            font-size: 26px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 10px;
+            transition: background 0.15s;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .emoji-picker .emoji-item:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .chat-footer .send-btn {
+            background: linear-gradient(135deg, #4a8ad6, #3a7ac6);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            box-shadow: 0 8px 24px rgba(74, 138, 214, 0.25);
+        }
+        .chat-footer .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(74, 138, 214, 0.35);
+        }
+        .chat-footer .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(26, 42, 58, 0.8);
+            backdrop-filter: blur(20px);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            max-width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.success {
+            background: rgba(46, 125, 50, 0.8);
+        }
+        .toast.error {
+            background: rgba(211, 47, 47, 0.8);
+        }
+
+        /* 模态框 */
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            animation: fadeIn 0.3s ease;
+        }
+        .custom-modal-overlay.active {
+            display: flex;
+        }
+        .custom-modal {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(30px);
+            border-radius: 32px;
+            max-width: 400px;
+            width: 100%;
+            padding: 28px 24px 24px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .custom-modal .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a2a3a;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .custom-modal .modal-desc {
+            font-size: 14px;
+            color: #4a5a6a;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .custom-modal .modal-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .custom-modal .modal-actions .btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px;
+            border: none;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .custom-modal .modal-actions .btn-primary {
+            background: linear-gradient(135deg, #4a8ad6, #3a7ac6);
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(74, 138, 214, 0.25);
+        }
+        .custom-modal .modal-actions .btn-success {
+            background: linear-gradient(135deg, #34a853, #2d8f47);
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(52, 168, 83, 0.25);
+        }
+        .custom-modal .modal-actions .btn-secondary {
+            background: rgba(200, 210, 220, 0.3);
+            backdrop-filter: blur(5px);
+            color: #2a3a4a;
+        }
+        .custom-modal .modal-actions .btn-secondary:hover {
+            background: rgba(200, 210, 220, 0.5);
+        }
+        .custom-modal .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 14px;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+            color: #1a2a3a;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(5px);
+            margin: 12px 0 16px;
+            min-height: 50px;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(30px);
+            border-radius: 32px;
+            max-width: 460px;
+            width: 100%;
+            padding: 32px 28px 28px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .modal-box .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a2a3a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-box .modal-sub {
+            font-size: 14px;
+            color: #4a5a6a;
+            margin: 6px 0 22px;
+        }
+        .modal-box .form-group {
+            margin-bottom: 18px;
+        }
+        .modal-box .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a2a3a;
+            margin-bottom: 5px;
+        }
+        .modal-box .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 14px;
+            font-size: 14px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(5px);
+            color: #1a2a3a;
+        }
+        .modal-box .form-group input:focus {
+            border-color: #4a8ad6;
+            box-shadow: 0 0 0 4px rgba(74, 138, 214, 0.1);
+        }
+        .modal-box .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .modal-box .modal-actions .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 80px;
+        }
+        .modal-box .modal-actions .btn-secondary {
+            background: rgba(200, 210, 220, 0.3);
+            backdrop-filter: blur(5px);
+            color: #2a3a4a;
+        }
+        .modal-box .modal-actions .btn-secondary:hover {
+            background: rgba(200, 210, 220, 0.5);
+        }
+        .modal-box .modal-actions .btn-primary {
+            background: linear-gradient(135deg, #4a8ad6, #3a7ac6);
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(74, 138, 214, 0.25);
+        }
+        .modal-box .modal-actions .btn-success {
+            background: linear-gradient(135deg, #34a853, #2d8f47);
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(52, 168, 83, 0.25);
+        }
+        .modal-box .status-msg {
+            margin-top: 14px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            display: none;
+        }
+        .modal-box .status-msg.success {
+            display: block;
+            background: rgba(46, 125, 50, 0.15);
+            color: #2a7a3a;
+            border: 1px solid rgba(46, 125, 50, 0.2);
+        }
+        .modal-box .status-msg.error {
+            display: block;
+            background: rgba(211, 47, 47, 0.1);
+            color: #b33a3a;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 响应式 */
+        @media (max-width: 520px) {
+            body {
+                padding: 0;
+            }
+            .app-container {
+                border-radius: 0;
+                max-height: 100vh;
+                height: 100vh;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container" id="app">
+
+        <!-- 登录页 -->
+        <div id="loginPage">
+            <span class="logo">🏫</span>
+            <h1>校园通</h1>
+            <p class="subtitle">连接 · 分享 · 成长</p>
+            <div class="login-card">
+                <label for="nicknameInput">👤 你的昵称</label>
+                <input type="text" id="nicknameInput" placeholder="输入一个酷酷的昵称..." maxlength="16" autofocus>
+                <button class="btn-primary" id="enterChatBtn">🚀 进入聊天室</button>
+                <div class="hint">💡 点击 📎 上传文件，自动发送链接</div>
+            </div>
+        </div>
+
+        <!-- 聊天界面 -->
+        <div id="chatPage">
+            <div class="chat-header">
+                <div class="title">🏫 校园<span>通</span></div>
+                <div class="right">
+                    <div class="user-badge" id="userBadge">
+                        <span class="avatar" id="userAvatar">你</span>
+                        <span id="userBadgeName">你</span>
+                    </div>
+                    <button class="settings-btn" id="settingsBtn" title="设置">⚙️</button>
+                </div>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">💬</div>
+                    <div class="empty-title">还没有消息</div>
+                </div>
+            </div>
+
+            <div class="chat-footer">
+                <div class="input-wrap">
+                    <textarea id="msgInput" rows="1" placeholder="输入消息或粘贴网盘链接..." maxlength="500"></textarea>
+                    <button class="action-btn" id="attachBtn" title="上传文件">📎</button>
+                    <button class="action-btn" id="emojiBtn" title="选择表情">😊</button>
+                    <div class="emoji-picker" id="emojiPicker"></div>
+                </div>
+                <button class="send-btn" id="sendBtn" title="发送">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文件上传模态框 -->
+    <div class="custom-modal-overlay" id="uploadModal">
+        <div class="custom-modal">
+            <div class="modal-title">📤 上传文件</div>
+            <div class="modal-desc">选择文件，上传后自动生成下载链接</div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="chooseFileBtn">📂 选择文件</button>
+                <button class="btn btn-secondary" id="cancelUploadBtn">取消</button>
+            </div>
+            <div style="margin-top:12px;font-size:13px;color:#6a7a8a;text-align:center;">或直接在输入框粘贴网盘分享链接</div>
+        </div>
+    </div>
+
+    <!-- 设置弹窗 -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-box">
+            <div class="modal-title">⚙️ 服务配置</div>
+            <div class="modal-sub">连接到 JSONBin 服务器，实现消息同步。</div>
+            <div class="form-group">
+                <label>🔑 API 密钥 (X-Master-Key)</label>
+                <input type="text" id="apiKeyInput" placeholder="输入你的 API 密钥" value="">
+            </div>
+            <div class="form-group">
+                <label>📦 Bin ID</label>
+                <input type="text" id="binIdInput" placeholder="输入你的 Bin ID" value="">
+            </div>
+            <div class="status-msg" id="settingsStatus"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="settingsCancelBtn">取消</button>
+                <button class="btn btn-success" id="defaultSettingsBtn">⭐ 默认设置</button>
+                <button class="btn btn-primary" id="settingsSaveBtn">💾 保存配置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 密码弹窗 -->
+    <div class="custom-modal-overlay" id="passwordModal">
+        <div class="custom-modal">
+            <div class="modal-title">🔐 请输入密码</div>
+            <div class="modal-desc" id="passwordDesc">请输入操作密码</div>
+            <input type="password" class="modal-input" id="passwordInput" placeholder="输入密码...">
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="confirmPasswordBtn">确认</button>
+                <button class="btn btn-secondary" id="cancelPasswordBtn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ======================================================================
+        //  校园通 · 简化版（使用 gofile.io 上传）
+        //  无需实名，自动生成下载链接
+        // ======================================================================
+
+        (function() {
+            'use strict';
+
+            // ===== 预设默认配置 =====
+            const PRESET_API_KEY = '$2a$10$F702.S/8Q.f4NxGxk9NteuufP5xvmXVYc9motIkp1qedp2pM0KSsS'; // 替换为真实值
+            const PRESET_BIN_ID = '6a8c3c52f5f4af5e293c071a';
+            const PRESET_PASSWORD = 'rasznb666';
+            const DELETE_PASSWORD = 'gly@12345';
+
+            // ---- DOM 引用 ----
+            const loginPage = document.getElementById('loginPage');
+            const chatPage = document.getElementById('chatPage');
+            const nicknameInput = document.getElementById('nicknameInput');
+            const enterChatBtn = document.getElementById('enterChatBtn');
+            const userBadgeName = document.getElementById('userBadgeName');
+            const userAvatar = document.getElementById('userAvatar');
+            const messagesContainer = document.getElementById('messagesContainer');
+            const emptyState = document.getElementById('emptyState');
+            const msgInput = document.getElementById('msgInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const emojiBtn = document.getElementById('emojiBtn');
+            const emojiPicker = document.getElementById('emojiPicker');
+            const attachBtn = document.getElementById('attachBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+            const settingsModal = document.getElementById('settingsModal');
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            const binIdInput = document.getElementById('binIdInput');
+            const settingsSaveBtn = document.getElementById('settingsSaveBtn');
+            const settingsCancelBtn = document.getElementById('settingsCancelBtn');
+            const defaultSettingsBtn = document.getElementById('defaultSettingsBtn');
+            const settingsStatus = document.getElementById('settingsStatus');
+            const toast = document.getElementById('toast');
+            const uploadModal = document.getElementById('uploadModal');
+            const chooseFileBtn = document.getElementById('chooseFileBtn');
+            const cancelUploadBtn = document.getElementById('cancelUploadBtn');
+            const passwordModal = document.getElementById('passwordModal');
+            const passwordInput = document.getElementById('passwordInput');
+            const passwordDesc = document.getElementById('passwordDesc');
+            const confirmPasswordBtn = document.getElementById('confirmPasswordBtn');
+            const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
+
+            // ---- 状态 ----
+            let currentNickname = '';
+            let messages = [];
+            let pollingTimer = null;
+            let isSending = false;
+            let isFirstLoad = true;
+            let isConfigValid = false;
+            let localStatusMap = new Map();
+            let modalResolve = null;
+
+            // ---- 配置 ----
+            const CONFIG_KEY = 'campus_chat_config';
+            const NICKNAME_KEY = 'campus_chat_nickname';
+
+            // ---- 工具函数 ----
+            function showToast(text, type, duration) {
+                type = type || 'info';
+                duration = duration || 2500;
+                toast.textContent = text;
+                toast.className = 'toast';
+                if (type === 'success') toast.classList.add('success');
+                if (type === 'error') toast.classList.add('error');
+                toast.classList.add('show');
+                clearTimeout(toast._hideTimer);
+                toast._hideTimer = setTimeout(function() {
+                    toast.classList.remove('show');
+                }, duration);
+            }
+
+            function getConfig() {
+                try {
+                    const raw = localStorage.getItem(CONFIG_KEY);
+                    if (raw) {
+                        const cfg = JSON.parse(raw);
+                        if (cfg.apiKey && cfg.binId) return cfg;
+                    }
+                } catch (_) { /* ignore */ }
+                return { apiKey: '', binId: '' };
+            }
+
+            function saveConfig(apiKey, binId) {
+                const cfg = { apiKey: apiKey.trim(), binId: binId.trim() };
+                localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg));
+                return cfg;
+            }
+
+            function getNickname() {
+                try {
+                    const n = localStorage.getItem(NICKNAME_KEY);
+                    if (n && n.trim()) return n.trim();
+                } catch (_) { /* ignore */ }
+                return '';
+            }
+
+            function saveNickname(name) {
+                localStorage.setItem(NICKNAME_KEY, name.trim());
+            }
+
+            function formatTime(isoStr) {
+                try {
+                    const d = new Date(isoStr);
+                    if (isNaN(d.getTime())) return '刚刚';
+                    const h = String(d.getHours()).padStart(2, '0');
+                    const m = String(d.getMinutes()).padStart(2, '0');
+                    return h + ':' + m;
+                } catch (_) { return '刚刚'; }
+            }
+
+            function formatDate(isoStr) {
+                try {
+                    const d = new Date(isoStr);
+                    if (isNaN(d.getTime())) return '';
+                    const today = new Date();
+                    const y = d.getFullYear();
+                    const mo = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    if (d.toDateString() === today.toDateString()) return '今天';
+                    if (d.toDateString() === new Date(today.getTime() - 86400000).toDateString()) return '昨天';
+                    return y + '年' + mo + '月' + day + '日';
+                } catch (_) { return ''; }
+            }
+
+            function generateId() {
+                return Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 7);
+            }
+
+            function linkify(text) {
+                var urlRegex = /(https?:\/\/[^\s]+)/g;
+                return text.replace(urlRegex, function(url) {
+                    return '<a href="' + url + '" target="_blank">' + url + '</a>';
+                });
+            }
+
+            // ---- 自定义弹窗 ----
+            function showUploadModal() {
+                return new Promise(function(resolve) {
+                    uploadModal.classList.add('active');
+                    modalResolve = resolve;
+                });
+            }
+
+            function hideUploadModal() {
+                uploadModal.classList.remove('active');
+            }
+
+            function showPasswordModal(desc) {
+                return new Promise(function(resolve) {
+                    passwordDesc.textContent = desc || '请输入操作密码';
+                    passwordInput.value = '';
+                    passwordModal.classList.add('active');
+                    modalResolve = resolve;
+                });
+            }
+
+            function hidePasswordModal() {
+                passwordModal.classList.remove('active');
+            }
+
+            // ---- 弹窗按钮事件 ----
+            cancelUploadBtn.addEventListener('click', function() {
+                hideUploadModal();
+                if (modalResolve) { modalResolve({ action: 'cancel' });
+                    modalResolve = null; }
+            });
+            chooseFileBtn.addEventListener('click', function() {
+                hideUploadModal();
+                if (modalResolve) { modalResolve({ action: 'choose' });
+                    modalResolve = null; }
+            });
+
+            cancelPasswordBtn.addEventListener('click', function() {
+                hidePasswordModal();
+                if (modalResolve) { modalResolve({ action: 'cancel' });
+                    modalResolve = null; }
+            });
+            confirmPasswordBtn.addEventListener('click', function() {
+                var pwd = passwordInput.value;
+                hidePasswordModal();
+                if (modalResolve) { modalResolve({ action: 'confirm', password: pwd });
+                    modalResolve = null; }
+            });
+
+            // ---- JSONBin 操作 ----
+            async function fetchMessagesFromBin(apiKey, binId) {
+                if (!apiKey || !binId) throw new Error('请先配置 API 密钥和 Bin ID');
+                const url = `https://api.jsonbin.io/v3/b/${binId}`;
+                const resp = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': apiKey,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!resp.ok) {
+                    let errMsg = 'HTTP ' + resp.status;
+                    try {
+                        const errData = await resp.json();
+                        if (errData.message) errMsg = errData.message;
+                    } catch (_) { /* ignore */ }
+                    throw new Error(errMsg);
+                }
+                const data = await resp.json();
+                return data.record?.messages || [];
+            }
+
+            async function updateMessagesToBin(apiKey, binId, msgs) {
+                if (!apiKey || !binId) throw new Error('请先配置 API 密钥和 Bin ID');
+                const url = `https://api.jsonbin.io/v3/b/${binId}`;
+                // 读当前完整 record 保留 signal 等字段
+                const getResp = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': apiKey,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!getResp.ok) throw new Error('获取记录失败');
+                const data = await getResp.json();
+                const record = data.record || {};
+                record.messages = msgs;
+                const putResp = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Master-Key': apiKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(record)
+                });
+                if (!putResp.ok) throw new Error('更新消息失败');
+                return await putResp.json();
+            }
+
+            // ---- gofile.io 上传（无需注册） ----
+            async function uploadToGofile(file) {
+                // gofile 需要先获取服务器
+                const serverResp = await fetch('https://api.gofile.io/servers');
+                if (!serverResp.ok) throw new Error('获取服务器失败');
+                const serverData = await serverResp.json();
+                if (!serverData.status || serverData.status !== 'ok') throw new Error('服务器状态异常');
+                const server = serverData.data.servers[0].name;
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const uploadResp = await fetch(`https://${server}.gofile.io/uploadFile`, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!uploadResp.ok) throw new Error('上传失败 (HTTP ' + uploadResp.status + ')');
+                const uploadData = await uploadResp.json();
+                if (!uploadData.status || uploadData.status !== 'ok') {
+                    throw new Error(uploadData.data?.message || '上传失败');
+                }
+                // 返回下载页链接（ guest 链接）
+                return uploadData.data.downloadPage;
+            }
+
+            // ---- 消息渲染 ----
+            function renderMessages(msgs) {
+                var sorted = msgs.slice().sort(function(a, b) { return new Date(a.time) - new Date(b.time); });
+                var items = messagesContainer.querySelectorAll('.message-item, .message-date-divider');
+                items.forEach(function(el) { el.remove(); });
+
+                if (sorted.length === 0) {
+                    emptyState.style.display = 'flex';
+                    return;
+                }
+                emptyState.style.display = 'none';
+
+                var lastDate = '';
+
+                sorted.forEach(function(msg) {
+                    var msgDate = formatDate(msg.time);
+                    if (msgDate && msgDate !== lastDate) {
+                        lastDate = msgDate;
+                        var divider = document.createElement('div');
+                        divider.className = 'message-date-divider';
+                        divider.innerHTML = '<span>' + msgDate + '</span>';
+                        messagesContainer.appendChild(divider);
+                    }
+
+                    var isSelf = msg.nickname === currentNickname;
+                    var status = msg.status || 'sent';
+
+                    var item = document.createElement('div');
+                    item.className = 'message-item ' + (isSelf ? 'self' : 'other');
+                    item.dataset.id = msg.id;
+
+                    var nameEl = document.createElement('div');
+                    nameEl.className = 'msg-nickname';
+                    nameEl.textContent = isSelf ? '我' : msg.nickname;
+                    item.appendChild(nameEl);
+
+                    var wrapper = document.createElement('div');
+                    wrapper.className = 'bubble-wrapper';
+
+                    var bubble = document.createElement('div');
+                    bubble.className = 'bubble';
+                    bubble.innerHTML = linkify(msg.content);
+                    wrapper.appendChild(bubble);
+
+                    if (isSelf) {
+                        var statusEl = document.createElement('span');
+                        statusEl.className = 'msg-status';
+                        statusEl.title = status === 'sending' ? '发送中...' :
+                            status === 'sent' ? '已发送' :
+                            '发送失败，请重试';
+                        if (status === 'sending') {
+                            var spinner = document.createElement('span');
+                            spinner.className = 'spinner';
+                            statusEl.appendChild(spinner);
+                        } else if (status === 'sent') {
+                            statusEl.innerHTML = '✓';
+                            statusEl.className += ' status-sent';
+                        } else if (status === 'error') {
+                            statusEl.innerHTML = '✗';
+                            statusEl.className += ' status-error';
+                        }
+                        wrapper.appendChild(statusEl);
+                    }
+
+                    item.appendChild(wrapper);
+
+                    var timeEl = document.createElement('div');
+                    timeEl.className = 'msg-time';
+                    timeEl.textContent = formatTime(msg.time);
+                    item.appendChild(timeEl);
+
+                    messagesContainer.appendChild(item);
+                });
+
+                scrollToBottom();
+            }
+
+            function scrollToBottom() {
+                requestAnimationFrame(function() {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                });
+            }
+
+            function updateMessageStatus(id, status) {
+                var msg = messages.find(function(m) { return m.id === id; });
+                if (msg) {
+                    msg.status = status;
+                    localStatusMap.set(id, status);
+                }
+            }
+
+            function mergeMessages(serverMsgs) {
+                return serverMsgs.map(function(msg) {
+                    var localStatus = localStatusMap.get(msg.id);
+                    if (localStatus) {
+                        return { ...msg, status: localStatus };
+                    }
+                    return { ...msg, status: 'sent' };
+                });
+            }
+
+            // ---- 加载消息 ----
+            async function loadMessages(showLoading) {
+                if (showLoading === undefined) showLoading = true;
+                var config = getConfig();
+                if (!config.apiKey || !config.binId) {
+                    isConfigValid = false;
+                    if (showLoading) {
+                        renderMessages([]);
+                        showToast('⚠️ 请先配置 JSONBin 服务', 'error', 3000);
+                        openSettings();
+                    }
+                    return;
+                }
+                isConfigValid = true;
+
+                try {
+                    var serverMsgs = await fetchMessagesFromBin(config.apiKey, config.binId);
+                    var mergedMsgs = mergeMessages(serverMsgs);
+                    messages = mergedMsgs;
+                    renderMessages(messages);
+                    if (isFirstLoad) {
+                        isFirstLoad = false;
+                        if (messages.length === 0) {
+                            var welcomeMsg = {
+                                id: generateId(),
+                                nickname: '🏫 校园通',
+                                content: '👋 欢迎！点击 📎 上传文件，自动生成链接分享',
+                                time: new Date().toISOString(),
+                                status: 'sent'
+                            };
+                            await sendMessageInternal(welcomeMsg, true);
+                        }
+                    }
+                } catch (err) {
+                    console.error('加载消息失败:', err);
+                    showToast('📡 加载消息失败: ' + err.message, 'error', 3000);
+                    if (err.message.includes('配置') || err.message.includes('API') || err.message.includes('HTTP 401') || err
+                        .message.includes('403')) {
+                        openSettings();
+                    }
+                }
+            }
+
+            // ---- 发送消息（内部） ----
+            async function sendMessageInternal(msgObj, silent) {
+                if (silent === undefined) silent = false;
+                var config = getConfig();
+                if (!config.apiKey || !config.binId) {
+                    if (!silent) showToast('⚠️ 请先配置 JSONBin 服务', 'error', 3000);
+                    openSettings();
+                    return false;
+                }
+
+                try {
+                    var currentMsgs = [];
+                    try {
+                        currentMsgs = await fetchMessagesFromBin(config.apiKey, config.binId);
+                    } catch (_) {
+                        currentMsgs = [];
+                    }
+                    var serverMsg = { ...msgObj };
+                    delete serverMsg.status;
+                    currentMsgs.push(serverMsg);
+                    await updateMessagesToBin(config.apiKey, config.binId, currentMsgs);
+                    return true;
+                } catch (err) {
+                    console.error('发送消息失败:', err);
+                    if (!silent) {
+                        showToast('❌ 发送失败: ' + err.message, 'error', 3000);
+                    }
+                    return false;
+                }
+            }
+
+            // ---- 用户发送文字消息 ----
+            async function sendUserMessage() {
+                if (isSending) return;
+                var content = msgInput.value.trim();
+                if (!content) {
+                    msgInput.focus();
+                    return;
+                }
+                if (!currentNickname) {
+                    showToast('⚠️ 请先设置昵称', 'error', 2000);
+                    return;
+                }
+
+                var config = getConfig();
+                if (!config.apiKey || !config.binId) {
+                    showToast('⚠️ 请先配置 JSONBin 服务', 'error', 3000);
+                    openSettings();
+                    return;
+                }
+
+                isSending = true;
+                sendBtn.disabled = true;
+                attachBtn.disabled = true;
+
+                var msgId = generateId();
+                var msgObj = {
+                    id: msgId,
+                    nickname: currentNickname,
+                    content: content,
+                    time: new Date().toISOString(),
+                    status: 'sending'
+                };
+
+                messages.push(msgObj);
+                localStatusMap.set(msgId, 'sending');
+                renderMessages(messages);
+
+                msgInput.value = '';
+                msgInput.style.height = 'auto';
+                msgInput.focus();
+
+                var success = await sendMessageInternal(msgObj, true);
+                if (success) {
+                    updateMessageStatus(msgId, 'sent');
+                    renderMessages(messages);
+                    await loadMessages(false);
+                } else {
+                    updateMessageStatus(msgId, 'error');
+                    renderMessages(messages);
+                    showToast('❌ 发送失败，请检查网络或配置', 'error', 3000);
+                }
+
+                isSending = false;
+                sendBtn.disabled = false;
+                attachBtn.disabled = false;
+            }
+
+            // ---- 文件上传流程 ----
+            async function handleFileUpload() {
+                if (isSending) return;
+                if (!currentNickname) {
+                    showToast('⚠️ 请先设置昵称', 'error', 2000);
+                    return;
+                }
+                var config = getConfig();
+                if (!config.apiKey || !config.binId) {
+                    showToast('⚠️ 请先配置 JSONBin 服务', 'error', 3000);
+                    openSettings();
+                    return;
+                }
+
+                // 显示上传模态框
+                var result = await showUploadModal();
+                if (result.action === 'cancel') return;
+
+                // 选择文件
+                var input = document.createElement('input');
+                input.type = 'file';
+                input.style.display = 'none';
+                document.body.appendChild(input);
+                input.onchange = async function(e) {
+                    var file = e.target.files[0];
+                    if (!file) {
+                        document.body.removeChild(input);
+                        return;
+                    }
+                    try {
+                        showToast('正在上传到 gofile.io ...', 'info');
+                        var link = await uploadToGofile(file);
+                        // 构建消息内容
+                        var fileSize = (file.size / 1024).toFixed(1) + ' KB';
+                        var content = '📎 ' + file.name + ' (' + fileSize + ') 下载: ' + link;
+
+                        // 发送消息
+                        var msgId = generateId();
+                        var msgObj = {
+                            id: msgId,
+                            nickname: currentNickname,
+                            content: content,
+                            time: new Date().toISOString(),
+                            status: 'sending'
+                        };
+                        messages.push(msgObj);
+                        localStatusMap.set(msgId, 'sending');
+                        renderMessages(messages);
+
+                        var success = await sendMessageInternal(msgObj, true);
+                        if (success) {
+                            updateMessageStatus(msgId, 'sent');
+                            renderMessages(messages);
+                            await loadMessages(false);
+                            showToast('✅ 文件上传成功！', 'success');
+                        } else {
+                            updateMessageStatus(msgId, 'error');
+                            renderMessages(messages);
+                            showToast('❌ 发送失败', 'error');
+                        }
+                    } catch (err) {
+                        showToast('上传失败: ' + err.message, 'error', 4000);
+                    } finally {
+                        document.body.removeChild(input);
+                    }
+                };
+                input.click();
+            }
+
+            // ---- 轮询 ----
+            function startPolling() {
+                stopPolling();
+                pollingTimer = setInterval(async function() {
+                    var config = getConfig();
+                    if (!config.apiKey || !config.binId) return;
+                    try {
+                        var serverMsgs = await fetchMessagesFromBin(config.apiKey, config.binId);
+                        var merged = mergeMessages(serverMsgs);
+                        if (merged.length !== messages.length) {
+                            messages = merged;
+                            renderMessages(messages);
+                        } else {
+                            var changed = false;
+                            for (var i = 0; i < merged.length; i++) {
+                                var a = messages[i];
+                                var b = merged[i];
+                                if (a.id !== b.id || a.content !== b.content || a.nickname !== b.nickname) {
+                                    changed = true;
+                                    break;
+                                }
+                            }
+                            if (changed) {
+                                messages = merged;
+                                renderMessages(messages);
+                            }
+                        }
+                    } catch (err) {
+                        console.warn('轮询失败:', err.message);
+                    }
+                }, 3000);
+            }
+
+            function stopPolling() {
+                if (pollingTimer) {
+                    clearInterval(pollingTimer);
+                    pollingTimer = null;
+                }
+            }
+
+            // ---- UI 控制 ----
+            function enterChat() {
+                var name = nicknameInput.value.trim();
+                if (!name) {
+                    showToast('⚠️ 请输入你的昵称', 'error', 2000);
+                    nicknameInput.focus();
+                    return;
+                }
+                currentNickname = name;
+                saveNickname(name);
+                userBadgeName.textContent = name;
+                userAvatar.textContent = name.charAt(0).toUpperCase();
+
+                loginPage.style.display = 'none';
+                chatPage.style.display = 'flex';
+
+                isFirstLoad = true;
+                loadMessages(true);
+                startPolling();
+
+                msgInput.focus();
+            }
+
+            function openSettings() {
+                var config = getConfig();
+                apiKeyInput.value = config.apiKey || '';
+                binIdInput.value = config.binId || '';
+                settingsStatus.className = 'status-msg';
+                settingsStatus.textContent = '';
+                settingsModal.classList.add('active');
+            }
+
+            function closeSettings() {
+                settingsModal.classList.remove('active');
+            }
+
+            function saveSettings() {
+                var apiKey = apiKeyInput.value.trim();
+                var binId = binIdInput.value.trim();
+
+                if (!apiKey || !binId) {
+                    settingsStatus.className = 'status-msg error';
+                    settingsStatus.textContent = '⚠️ 请填写完整的 API 密钥和 Bin ID';
+                    return;
+                }
+
+                settingsStatus.className = 'status-msg';
+                settingsStatus.textContent = '⏳ 测试连接中...';
+                settingsStatus.style.display = 'block';
+
+                fetchMessagesFromBin(apiKey, binId)
+                    .then(function() {
+                        saveConfig(apiKey, binId);
+                        settingsStatus.className = 'status-msg success';
+                        settingsStatus.textContent = '✅ 配置已保存，连接成功！';
+                        isConfigValid = true;
+                        showToast('✅ 配置已保存', 'success', 2000);
+                        setTimeout(function() {
+                            closeSettings();
+                            if (chatPage.style.display === 'flex') {
+                                loadMessages(true);
+                            }
+                        }, 600);
+                    })
+                    .catch(function(err) {
+                        settingsStatus.className = 'status-msg error';
+                        settingsStatus.textContent = '❌ 连接失败: ' + err.message + '。请检查密钥和 Bin ID';
+                        settingsStatus.style.display = 'block';
+                        showToast('❌ 连接失败，请检查配置', 'error', 3000);
+                    });
+            }
+
+            async function applyDefaultSettings() {
+                var result = await showPasswordModal('请输入默认配置密码 (预设: rasznb666)');
+                if (result.action === 'cancel') {
+                    showToast('操作已取消', 'info');
+                    return;
+                }
+                var password = result.password;
+                if (password !== PRESET_PASSWORD) {
+                    showToast('❌ 密码错误，无法应用默认配置', 'error', 2500);
+                    return;
+                }
+
+                if (PRESET_API_KEY === '你的默认API密钥' || PRESET_BIN_ID === '你的默认Bin ID') {
+                    showToast('⚠️ 预设配置未设置，请先修改代码中的 PRESET_API_KEY 和 PRESET_BIN_ID', 'error', 4000);
+                    return;
+                }
+
+                saveConfig(PRESET_API_KEY, PRESET_BIN_ID);
+                apiKeyInput.value = '';
+                binIdInput.value = '';
+                settingsStatus.className = 'status-msg success';
+                settingsStatus.textContent = '✅ 已应用默认配置（密钥已隐藏）';
+                settingsStatus.style.display = 'block';
+                isConfigValid = true;
+                showToast('✅ 默认配置已应用', 'success', 2000);
+
+                setTimeout(function() {
+                    closeSettings();
+                    if (chatPage.style.display === 'flex') {
+                        loadMessages(true);
+                    }
+                }, 600);
+            }
+
+            // ---- 表情选择器 ----
+            var faceEmojis = [
+                '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎',
+                '😍', '🥰', '😘', '😗', '😙', '😚', '☺️', '🙂', '🤗', '🤩', '🤔', '🤨',
+                '😐', '😑', '😶', '🙄', '😏', '😣', '😥', '😮', '🤐', '😯', '😪', '😫',
+                '😴', '😌', '😛', '😜', '😝', '🤤', '😒', '😓', '😔', '😕', '🙃', '🤑',
+                '😲', '☹️', '🙁', '😖', '😞', '😟', '😤', '😢', '😭', '😦', '😧', '😨',
+                '😩', '🤯', '😬', '😰', '😱', '🥵', '🥶', '😳', '🤪', '😵', '😡', '😠',
+                '🤬', '😷', '🤒', '🤕', '🤢', '🤮', '🥴', '😵‍💫', '🤧', '🥳', '🥺', '🧐',
+                '🤓', '😈', '👿', '👹', '👺', '💀', '👻', '👽', '🤖', '🎃', '😺', '😸',
+                '😹', '😻', '😼', '😽', '🙀', '😿', '😾'
+            ];
+
+            function buildEmojiPicker() {
+                emojiPicker.innerHTML = '';
+                faceEmojis.forEach(function(emoji) {
+                    var span = document.createElement('span');
+                    span.className = 'emoji-item';
+                    span.textContent = emoji;
+                    span.dataset.emoji = emoji;
+                    span.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        var emojiChar = span.dataset.emoji;
+                        insertEmojiAtCursor(emojiChar);
+                        emojiPicker.classList.remove('active');
+                    });
+                    emojiPicker.appendChild(span);
+                });
+            }
+            buildEmojiPicker();
+
+            function insertEmojiAtCursor(emoji) {
+                var start = msgInput.selectionStart;
+                var end = msgInput.selectionEnd;
+                var current = msgInput.value;
+                msgInput.value = current.substring(0, start) + emoji + current.substring(end);
+                msgInput.focus();
+                var newPos = start + emoji.length;
+                msgInput.setSelectionRange(newPos, newPos);
+                autoResizeTextarea();
+            }
+
+            function toggleEmojiPicker(e) {
+                e.stopPropagation();
+                var isActive = emojiPicker.classList.contains('active');
+                emojiPicker.classList.toggle('active');
+                if (!isActive) {
+                    document.addEventListener('click', closeEmojiPickerOutside);
+                } else {
+                    document.removeEventListener('click', closeEmojiPickerOutside);
+                }
+            }
+
+            function closeEmojiPickerOutside(e) {
+                if (!emojiPicker.contains(e.target) && e.target !== emojiBtn) {
+                    emojiPicker.classList.remove('active');
+                    document.removeEventListener('click', closeEmojiPickerOutside);
+                }
+            }
+
+            function autoResizeTextarea() {
+                msgInput.style.height = 'auto';
+                msgInput.style.height = Math.min(msgInput.scrollHeight, 100) + 'px';
+            }
+
+            function onKeydown(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendUserMessage();
+                }
+            }
+
+            // ---- 初始化 ----
+            function init() {
+                var savedName = getNickname();
+                if (savedName) {
+                    nicknameInput.value = savedName;
+                    currentNickname = savedName;
+                }
+
+                var config = getConfig();
+                if (config.apiKey && config.binId) {
+                    isConfigValid = true;
+                } else {
+                    setTimeout(function() {
+                        if (!isConfigValid) {
+                            showToast('📡 首次使用，请配置 JSONBin 服务', 'info', 4000);
+                            openSettings();
+                        }
+                    }, 800);
+                }
+
+                // ---- 事件绑定 ----
+                enterChatBtn.addEventListener('click', enterChat);
+                nicknameInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') enterChat();
+                });
+
+                sendBtn.addEventListener('click', sendUserMessage);
+                msgInput.addEventListener('keydown', onKeydown);
+                msgInput.addEventListener('input', autoResizeTextarea);
+
+                emojiBtn.addEventListener('click', toggleEmojiPicker);
+                attachBtn.addEventListener('click', handleFileUpload);
+
+                settingsBtn.addEventListener('click', openSettings);
+                settingsCancelBtn.addEventListener('click', closeSettings);
+                settingsSaveBtn.addEventListener('click', saveSettings);
+                defaultSettingsBtn.addEventListener('click', applyDefaultSettings);
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && settingsModal.classList.contains('active')) {
+                        closeSettings();
+                    }
+                });
+
+                if (!savedName) {
+                    setTimeout(function() { nicknameInput.focus(); }, 400);
+                } else {
+                    setTimeout(function() {
+                        if (loginPage.style.display !== 'none') {
+                            nicknameInput.focus();
+                        }
+                    }, 400);
+                }
+            }
+
+            init();
+
+        })();
+    </script>
+</body>
+</html>
